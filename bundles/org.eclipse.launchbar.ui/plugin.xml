@@ -25,6 +25,12 @@
       </command>
       <command
             categoryId="org.eclipse.launchbar.ui.category.launchBar"
+            defaultHandler="org.eclipse.launchbar.ui.internal.commands.DeployCommandHandler"
+            id="org.eclipse.launchbar.ui.command.deploy"
+            name="Deploy Workspace Plugins">
+      </command>
+      <command
+            categoryId="org.eclipse.launchbar.ui.category.launchBar"
             defaultHandler="org.eclipse.launchbar.ui.internal.commands.LaunchActiveCommandHandler"
             id="org.eclipse.launchbar.ui.command.launchActive"
             name="Launch Active Launch Configuration">
@@ -69,6 +75,15 @@
             descriptorTypeId="org.eclipse.launchbar.core.descriptor.default"
             labelProvider="org.eclipse.launchbar.ui.internal.DefaultDescriptorLabelProvider">
       </descriptorUI>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.eclipse.launchbar.ui.command.launchActive"
+            contextId="org.eclipse.ui.contexts.dialogAndWindow"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="F12">
+      </key>
    </extension>
 
 </plugin>
