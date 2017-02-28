@@ -24,16 +24,11 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.launchbar.core.internal.LaunchBarManager;
+import org.eclipse.launchbar.core.ILaunchBarManager;
 import org.eclipse.launchbar.ui.internal.Activator;
 import org.eclipse.launchbar.ui.internal.Messages;
 
 public class StopActiveCommandHandler extends AbstractHandler {
-	private LaunchBarManager launchBarManager;
-
-	public StopActiveCommandHandler() {
-		launchBarManager = Activator.getDefault().getLaunchBarUIManager().getManager();
-	}
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -43,10 +38,10 @@ public class StopActiveCommandHandler extends AbstractHandler {
 
 	public void stop() {
 		stopBuild();
-		stopActiveLaunches();
+		stopActiveLaunches(Activator.getService(ILaunchBarManager.class));
 	}
 
-	protected void stopActiveLaunches() {
+	static void stopActiveLaunches(ILaunchBarManager launchBarManager) {
 		final ILaunch[] activeLaunches = DebugPlugin.getDefault().getLaunchManager().getLaunches();
 		if (activeLaunches != null && activeLaunches.length > 0) {
 			new Job(Messages.StopActiveCommandHandler_0) {
@@ -58,16 +53,20 @@ public class StopActiveCommandHandler extends AbstractHandler {
 							return Status.OK_STATUS;
 						}
 						for (ILaunch launch : activeLaunches) {
-							ILaunchConfiguration launchConfig = launch.getLaunchConfiguration();
-							if (activeConfig.equals(launchConfig)) {
-								launch.terminate();
-								continue;
-							}
-							if (launchConfig instanceof ILaunchConfigurationWorkingCopy) {
-								// There are evil delegates that use a working copy for scratch storage
-								if (activeConfig.equals(((ILaunchConfigurationWorkingCopy) launchConfig).getOriginal())) {
+							if (launch.canTerminate()) {
+								ILaunchConfiguration launchConfig = launch.getLaunchConfiguration();
+								if (activeConfig.equals(launchConfig)) {
 									launch.terminate();
 									continue;
+								}
+								if (launchConfig instanceof ILaunchConfigurationWorkingCopy) {
+									// There are evil delegates that use a
+									// working copy for scratch storage
+									if (activeConfig
+											.equals(((ILaunchConfigurationWorkingCopy) launchConfig).getOriginal())) {
+										launch.terminate();
+										continue;
+									}
 								}
 							}
 						}

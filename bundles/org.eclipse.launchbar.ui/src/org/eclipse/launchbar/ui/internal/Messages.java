@@ -1,13 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2015 QNX Software Systems and others.
+ * Copyright (c) 2014, 2016 QNX Software Systems and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
+<<<<<<< HEAD
  *
  * Contributors:
  *     Doug Schaefer
  *     Torkild U. Resheim
+=======
+>>>>>>> master
  *******************************************************************************/
 package org.eclipse.launchbar.ui.internal;
 
@@ -15,8 +18,10 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.launchbar.ui.internal.messages"; //$NON-NLS-1$
+
 	public static String BuildActiveCommandHandler_0;
 	public static String BuildActiveCommandHandler_1;
+<<<<<<< HEAD
 	public static String ConfigSelector_0;
 	public static String ConfigSelector_1;
 	public static String ConfigSelector_2;
@@ -43,6 +48,11 @@ public class Messages extends NLS {
 	public static String LaunchConfigurationEditDialog_5;
 	public static String LaunchConfigurationEditDialog_6;
 	public static String ModeSelector_0;
+=======
+	public static String StopActiveCommandHandler_0;
+	public static String StopActiveCommandHandler_1;
+
+>>>>>>> master
 	public static String NewLaunchConfigEditPage_0;
 	public static String NewLaunchConfigEditPage_1;
 	public static String NewLaunchConfigEditPage_2;
@@ -50,6 +60,7 @@ public class Messages extends NLS {
 	public static String NewLaunchConfigEditPage_4;
 	public static String NewLaunchConfigEditPage_5;
 	public static String NewLaunchConfigEditPage_6;
+	public static String NewLaunchConfigEditPage_7;
 	public static String NewLaunchConfigModePage_0;
 	public static String NewLaunchConfigModePage_1;
 	public static String NewLaunchConfigModePage_2;
@@ -57,10 +68,7 @@ public class Messages extends NLS {
 	public static String NewLaunchConfigTypePage_1;
 	public static String NewLaunchConfigTypePage_2;
 	public static String NewLaunchConfigWizard_0;
-	public static String StopActiveCommandHandler_0;
-	public static String StopActiveCommandHandler_1;
-	public static String TargetSelector_CreateNewTarget;
-	
+
 	public static String DescriptorMustNotBeNull;
 	public static String DescriptorMustNotBeNullDesc;
 	public static String NoActiveTarget;
@@ -69,13 +77,19 @@ public class Messages extends NLS {
 	public static String CannotEditLaunchConfiguration;
 	public static String NoLaunchModeSelected;
 	public static String NoLaunchGroupSelected;
+	public static String LaunchBarLaunchConfigDialog_Edit1;
+
+	public static String LaunchBarLaunchConfigDialog_Edit2;
+
+	public static String LaunchBarLaunchConfigDialog_EditConfiguration;
+
+	public static String LaunchBarLaunchConfigDialog_SetParameters;
+
 	public static String LaunchConfigurationNotFound;
 	public static String LaunchConfigurationNotFoundDesc;
 	public static String NoLaunchTabsDefined;
 	public static String NoLaunchTabsDefinedDesc;
-	
-	
-	
+
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -16,6 +16,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.launchbar.core.ILaunchBarManager;
+import org.eclipse.launchbar.core.internal.target.LaunchTargetManager;
+import org.eclipse.launchbar.core.target.ILaunchTargetManager;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -24,25 +26,44 @@ public class Activator extends Plugin {
 	public static final String PLUGIN_ID = "org.eclipse.launchbar.core"; //$NON-NLS-1$
 	private static Activator plugin;
 
+	private static LaunchTargetManager launchTargetManager;
+	private static LaunchBarManager launchBarManager;
+
 	public void start(BundleContext bundleContext) throws Exception {
 		super.start(bundleContext);
 		plugin = this;
-		bundleContext.registerService(ILaunchBarManager.class, new LaunchBarManager(), null);
+
+		launchTargetManager = new LaunchTargetManager();
+		bundleContext.registerService(ILaunchTargetManager.class, launchTargetManager, null);
+
+		launchBarManager = new LaunchBarManager();
+		bundleContext.registerService(ILaunchBarManager.class, launchBarManager, null);
 	}
 
 	public void stop(BundleContext bundleContext) throws Exception {
 		super.stop(bundleContext);
 		plugin = null;
+		launchTargetManager = null;
+		launchBarManager = null;
 	}
 
 	public static Activator getDefault() {
 		return plugin;
 	}
 
+	public static LaunchBarManager getLaunchBarManager() {
+		return launchBarManager;
+	}
+
+	public static LaunchTargetManager getLaunchTargetManager() {
+		return launchTargetManager;
+	}
+
 	/**
 	 * Return the OSGi service with the given service interface.
 	 * 
-	 * @param service service interface
+	 * @param service
+	 *            service interface
 	 * @return the specified service or null if it's not registered
 	 */
 	public static <T> T getService(Class<T> service) {
@@ -70,8 +91,7 @@ public class Activator extends Plugin {
 		}
 	}
 
-	private static final String DEBUG_ONE =
-			PLUGIN_ID + "/debug/launchbar"; //$NON-NLS-1$
+	private static final String DEBUG_ONE = PLUGIN_ID + "/debug/launchbar"; //$NON-NLS-1$
 
 	public static void trace(String str) {
 		if (plugin == null || (plugin.isDebugging() && "true".equalsIgnoreCase(Platform.getDebugOption(DEBUG_ONE)))) //$NON-NLS-1$

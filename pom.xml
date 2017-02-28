@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<prerequisites>
-		<maven>3.0.5</maven>
+		<maven>3.1.1</maven>
 	</prerequisites>
 
 	<groupId>org.eclipse.launchbar</groupId>
@@ -14,8 +14,8 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<tycho-version>0.22.0</tycho-version>
-		<tycho-extras-version>0.22.0</tycho-extras-version>
+		<tycho-version>1.0.0</tycho-version>
+		<tycho-extras-version>1.0.0</tycho-extras-version>
 		<sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
 		<sonar.jacoco.reportPath>${project.basedir}/../../target/jacoco.exec</sonar.jacoco.reportPath>
@@ -39,13 +39,12 @@
 
 	<repositories>
 		<repository>
-			<id>eclipse</id>
-			<url>http://download.eclipse.org/releases/mars/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
 			<id>platform</id>
+<<<<<<< HEAD
 			<url>http://download.eclipse.org/eclipse/updates/4.5/</url>
+=======
+			<url>http://download.eclipse.org/eclipse/updates/4.6/</url>
+>>>>>>> master
 			<layout>p2</layout>
 		</repository>
 		<repository>
@@ -55,12 +54,17 @@
 		</repository>
 		<repository>
 			<id>orbit</id>
-			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20150124073747/repository/</url>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>cdt</id>
+			<url>http://download.eclipse.org/tools/cdt/releases/9.0</url>
 			<layout>p2</layout>
 		</repository>
 		<repository>
 			<id>remote</id>
-			<url>http://download.eclipse.org/tools/ptp/builds/remote/2.0.0/</url>
+			<url>http://download.eclipse.org/tools/ptp/updates/remote/neon/</url>
 			<layout>p2</layout>
 		</repository>
 	</repositories>
@@ -68,8 +72,14 @@
 	<modules>
 		<module>bundles/org.eclipse.launchbar.core</module>
 		<module>bundles/org.eclipse.launchbar.ui</module>
+		<module>bundles/org.eclipse.launchbar.ui.controls</module>
 		<module>features/org.eclipse.launchbar</module>
 		<module>tests/org.eclipse.launchbar.core.tests</module>
+		
+		<module>bundles/org.eclipse.launchbar.remote.core</module>
+		<module>bundles/org.eclipse.launchbar.remote.ui</module>
+		<module>features/org.eclipse.launchbar.remote</module>
+		
 		<module>repo</module>
 	</modules>
 
@@ -141,7 +151,7 @@
 					<plugin>
 						<groupId>org.eclipse.cbi.maven.plugins</groupId>
 						<artifactId>eclipse-jarsigner-plugin</artifactId>
-						<version>1.1.1</version>
+						<version>1.1.3</version>
 						<executions>
 							<execution>
 								<id>sign</id>
@@ -214,11 +224,6 @@
 							<arch>x86_64</arch>
 						</environment>
 						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>ppc64</arch>
-						</environment>
-						<environment>
 							<os>win32</os>
 							<ws>win32</ws>
 							<arch>x86</arch>
@@ -232,16 +237,6 @@
 							<os>macosx</os>
 							<ws>cocoa</ws>
 							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>aix</os>
-							<ws>gtk</ws>
-							<arch>ppc</arch>
-						</environment>
-						<environment>
-							<os>solaris</os>
-							<ws>gtk</ws>
-							<arch>sparc</arch>
 						</environment>
 					</environments>
 				</configuration>
@@ -290,7 +285,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.4.1</version>
+					<version>3.0.2</version>
 					<configuration>
 						<encoding>ISO-8859-1</encoding>
 					</configuration>
@@ -298,12 +293,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-antrun-plugin</artifactId>
-					<version>1.3</version>
+					<version>1.8</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>findbugs-maven-plugin</artifactId>
-					<version>2.3.2</version>
+					<version>3.0.4</version>
 					<configuration>
 						<findbugsXmlOutput>true</findbugsXmlOutput>
 						<failOnError>false</failOnError>
@@ -319,7 +314,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-pmd-plugin</artifactId>
-					<version>2.5</version>
+					<version>3.7</version>
 					<configuration>
 						<sourceEncoding>utf-8</sourceEncoding>
 						<minimumTokens>100</minimumTokens>

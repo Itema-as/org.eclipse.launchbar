@@ -7,28 +7,24 @@
  *
  * Contributors:
  *     Doug Schaefer
+<<<<<<< HEAD
  *     Torkild U. Resheim
+=======
+ *     Torkild U. Resheim - add preference to control target selector
+ *     Vincent Guignot - Ingenico - add preference to control Build button     
+>>>>>>> master
  *******************************************************************************/
 package org.eclipse.launchbar.ui.internal;
 
-import org.eclipse.core.commands.Command;
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.IParameter;
-import org.eclipse.core.commands.Parameterization;
-import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
-import org.eclipse.launchbar.core.ILaunchBarManager;
-import org.eclipse.launchbar.core.internal.LaunchBarManager;
+import org.eclipse.launchbar.ui.ILaunchBarUIManager;
+import org.eclipse.launchbar.ui.internal.target.LaunchTargetUIManager;
+import org.eclipse.launchbar.ui.target.ILaunchTargetUIManager;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
-import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -42,6 +38,7 @@ public class Activator extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "org.eclipse.launchbar.ui"; //$NON-NLS-1$
 
 	// Images
+<<<<<<< HEAD
 	public static final String IMG_BUTTON_BUILD = "build"; //$NON-NLS-1$
 	public static final String IMG_BUTTON_LAUNCH = "launch"; //$NON-NLS-1$
 	public static final String IMG_BUTTON_STOP = "stop"; //$NON-NLS-1$
@@ -58,12 +55,12 @@ public class Activator extends AbstractUIPlugin {
 	public static final String PREF_ENABLE_LAUNCHBAR = "enableLaunchBar"; //$NON-NLS-1$
 	public static final String PREF_ENABLE_TARGETSELECTOR = "enableTargetSelector"; //$NON-NLS-1$
 	public static final String PREF_LAUNCH_HISTORY_SIZE = "launchHistorySize"; //$NON-NLS-1$
+=======
+	public static final String IMG_LOCAL_TARGET = "localTarget"; //$NON-NLS-1$
+>>>>>>> master
 
 	// The shared instance
 	private static Activator plugin;
-
-	// The cache of the Launch Bar UI Manager Object
-	private LaunchBarUIManager launchBarUIManager; 
 
 	/**
 	 * The constructor
@@ -71,17 +68,26 @@ public class Activator extends AbstractUIPlugin {
 	public Activator() {
 	}
 
+	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
 
 		ImageRegistry imageRegistry = getImageRegistry();
+<<<<<<< HEAD
 		imageRegistry.put(IMG_BUTTON_BUILD, imageDescriptorFromPlugin(PLUGIN_ID, "icons/build.png")); //$NON-NLS-1$
 		imageRegistry.put(IMG_BUTTON_LAUNCH, imageDescriptorFromPlugin(PLUGIN_ID, "icons/launch.png")); //$NON-NLS-1$
 		imageRegistry.put(IMG_BUTTON_STOP, imageDescriptorFromPlugin(PLUGIN_ID, "icons/stop.png")); //$NON-NLS-1$
 		imageRegistry.put(IMG_BUTTON_DEPLOY, imageDescriptorFromPlugin(PLUGIN_ID, "icons/deploy.png")); //$NON-NLS-1$
+=======
+		imageRegistry.put(IMG_LOCAL_TARGET, imageDescriptorFromPlugin(PLUGIN_ID, "icons/localTarget.png")); //$NON-NLS-1$
+
+		context.registerService(ILaunchTargetUIManager.class, new LaunchTargetUIManager(), null);
+		context.registerService(ILaunchBarUIManager.class, new LaunchBarUIManager(), null);
+>>>>>>> master
 	}
 
+	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
@@ -94,14 +100,6 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static Activator getDefault() {
 		return plugin;
-	}
-
-	public LaunchBarUIManager getLaunchBarUIManager() {
-		if (launchBarUIManager == null) {
-			LaunchBarManager manager = (LaunchBarManager) getService(ILaunchBarManager.class);
-			launchBarUIManager = new LaunchBarUIManager(manager);
-		}
-		return launchBarUIManager;
 	}
 
 	public Image getImage(String id) {
@@ -118,38 +116,6 @@ public class Activator extends AbstractUIPlugin {
 
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
-	}
-
-	public static void runCommand(String commandId, String... params) {
-		final ICommandService commandService = (ICommandService) PlatformUI.getWorkbench()
-				.getService(ICommandService.class);
-		Command command = commandService.getCommand(commandId);
-		final Event trigger = new Event();
-		final IHandlerService handlerService = (IHandlerService) PlatformUI.getWorkbench()
-				.getService(IHandlerService.class);
-		ExecutionEvent executionEvent = handlerService.createExecutionEvent(command, trigger);
-		if (params.length == 0) {
-			try {
-				command.executeWithChecks(executionEvent);
-			} catch (OperationCanceledException e) {
-				// abort
-			} catch (Exception e) {
-				log(e);
-			}
-		} else {
-			try {
-				final Parameterization[] parameterizations = new Parameterization[params.length / 2];
-				for (int i = 0; i < params.length; i += 2) {
-					IParameter param = command.getParameter(params[i]);
-					Parameterization parm = new Parameterization(param, params[i + 1]);
-					parameterizations[i / 2] = parm;
-				}
-				ParameterizedCommand parmCommand = new ParameterizedCommand(command, parameterizations);
-				handlerService.executeCommand(parmCommand, null);
-			} catch (Exception e) {
-				log(e);
-			}
-		}
 	}
 
 	public static void log(IStatus status) {

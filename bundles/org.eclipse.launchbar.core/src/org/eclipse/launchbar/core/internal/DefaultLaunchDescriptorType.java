@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.launchbar.core.ILaunchDescriptor;
 import org.eclipse.launchbar.core.ILaunchDescriptorType;
@@ -30,12 +31,25 @@ public class DefaultLaunchDescriptorType implements ILaunchDescriptorType {
 	private Map<ILaunchConfiguration, DefaultLaunchDescriptor> descriptors = new HashMap<>();
 
 	@Override
+	public boolean supportsTargets() throws CoreException {
+		// Old style launch configs do not support targets.
+		return false;
+	}
+
+	@Override
 	public ILaunchDescriptor getDescriptor(Object launchObject) {
 		if (launchObject instanceof ILaunchConfiguration) {
 			ILaunchConfiguration config = (ILaunchConfiguration) launchObject;
 			try {
-				if (config.getType() != null && config.getType().isPublic()
-						&& !(config.getAttribute(ILaunchManager.ATTR_PRIVATE, false))) {
+				ILaunchConfigurationType type = config.getType();
+				if (type == null) {
+					return null;
+				}
+
+				// Filter out private and external tools builders
+				String category = type.getCategory();
+				if (type.isPublic() && !(config.getAttribute(ILaunchManager.ATTR_PRIVATE, false))
+						&& !("org.eclipse.ui.externaltools.builder".equals(category))) { //$NON-NLS-1$
 
 					DefaultLaunchDescriptor descriptor = descriptors.get(config);
 					if (descriptor == null) {
